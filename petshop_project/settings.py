@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+import dj_database_url 
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -80,21 +81,36 @@ WSGI_APPLICATION = 'petshop_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+ 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DB_NAME'),
+#         'USER': os.getenv('DB_USER'),
+#         'PASSWORD': os.getenv('DB_PASSWORD'),
+#         'HOST': os.getenv('DB_HOST'),
+#         'PORT': os.getenv('DB_PORT'),
+#         # ADICIONE ESTAS 3 LINHAS ABAIXO:
+#         'OPTIONS': { 
+#             "sslmode": "prefer",
+#         },
+#         dj_database_url.config(default=os.getenv("DATABASE_URL")),
+#     }
+# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
-        # ADICIONE ESTAS 3 LINHAS ABAIXO:
-        'OPTIONS': {
-            'client_encoding': 'UTF8',
-        },
-    }
+    'default': dj_database_url.config(
+        default=f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}",
+        # Adiciona a opção de client_encoding diretamente na conexão
+        conn_health_checks=True,
+        conn_max_age=600,
+        ssl_require=False, # Supabase gerencia SSL, então não precisamos forçar aqui
+    )
 }
 
+# A opção client_encoding é adicionada aqui para o pooler da Supabase
+DATABASES['default']['OPTIONS'] = {
+    'client_encoding': 'UTF8',
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
