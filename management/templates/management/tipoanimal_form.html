@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar Tipo de Animal{% endblock %}
+
+{% block content %}
+    <style>
+        /* Estilos para o nosso seletor de ícones */
+        .icon-picker {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .icon-picker .icon-option {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .icon-picker .icon-option:hover {
+            background-color: #f0f0f0;
+            border-color: #0d6efd;
+        }
+        .icon-picker .icon-option.selected {
+            background-color: #0d6efd;
+            color: white;
+            border-color: #0d6efd;
+        }
+        .icon-picker i {
+            font-size: 2rem;
+        }
+    </style>
+
+    <h1>Cadastrar Novo Tipo de Animal</h1>
+    <hr>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.nome.label_tag }}
+        {{ form.nome }}
+
+        <input type="hidden" name="icone" id="id_icone">
+
+        <label class="form-label mt-3">Escolha um Ícone:</label>
+        <div class="icon-picker">
+            <div class="icon-option" data-icon="fas fa-dog"><i class="fas fa-dog"></i></div>
+            <div class="icon-option" data-icon="fas fa-cat"><i class="fas fa-cat"></i></div>
+            <div class="icon-option" data-icon="fas fa-dove"><i class="fas fa-dove"></i></div>
+            <div class="icon-option" data-icon="fas fa-fish"><i class="fas fa-fish"></i></div>
+            <div class="icon-option" data-icon="fas fa-otter"><i class="fas fa-otter"></i></div>
+            <div class="icon-option" data-icon="fas fa-horse"><i class="fas fa-horse"></i></div>
+            <div class="icon-option" data-icon="fas fa-frog"><i class="fas fa-frog"></i></div>
+            <div class="icon-option" data-icon="fas fa-spider"><i class="fas fa-spider"></i></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-4">Salvar</button>
+        <a href="{% url 'tipoanimal_list' %}" class="btn btn-secondary mt-4">Cancelar</a>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hiddenInput = document.getElementById('id_icone');
+            const iconOptions = document.querySelectorAll('.icon-option');
+
+            iconOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove a seleção de todos os outros
+                    iconOptions.forEach(opt => opt.classList.remove('selected'));
+
+                    // Adiciona a classe 'selected' ao clicado
+                    this.classList.add('selected');
+
+                    // Atualiza o valor do campo invisível
+                    hiddenInput.value = this.dataset.icon;
+                });
+            });
+        });
+    </script>
+{% endblock %}

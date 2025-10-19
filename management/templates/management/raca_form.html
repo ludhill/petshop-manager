@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar Raça{% endblock %}
+
+{% block content %}
+    <h1>Cadastrar Nova Raça</h1>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        
+        <button type="submit" class="btn btn-primary mt-3">Salvar Raça</button>
+        <a href="{% url 'raca_list' %}" class="btn btn-secondary mt-3">Cancelar</a>
+    </form>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar Animal{% endblock %}
+
+{% block content %}
+    <h1>Cadastrar Novo Animal</h1>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="id_nome" class="form-label">Nome do Animal:</label>
+            <input type="text" name="nome" id="id_nome" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_data_nascimento" class="form-label">Data de Nascimento:</label>
+            <input type="date" name="data_nascimento" id="id_data_nascimento" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_sexo" class="form-label">Sexo:</label>
+            <select name="sexo" id="id_sexo" class="form-select" required>
+                <option value="" selected>---------</option>
+                <option value="M">Macho</option>
+                <option value="F">Fêmea</option>
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_tipo_animal" class="form-label">Tipo de Animal:</label>
+            <select name="tipo_animal" id="id_tipo_animal" class="form-select" required>
+                <option value="" selected>---------</option>
+                {% for tipo in tipos_de_animais %}
+                    <option value="{{ tipo.id }}">{{ tipo.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_raca" class="form-label">Raça:</label>
+            <select name="raca" id="id_raca" class="form-select" required>
+                <option value="">Selecione um tipo de animal primeiro</option>
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Salvar Animal</button>
+    </form>
+    
+    <script>
+        document.getElementById('id_tipo_animal').addEventListener('change', function() {
+            const tipoId = this.value;
+            const racaSelect = document.getElementById('id_raca');
+            
+            racaSelect.innerHTML = '<option value="">Carregando...</option>';
+
+            if (tipoId) {
+                const url = `/management/api/get-racas/?tipo_id=${tipoId}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        racaSelect.innerHTML = '<option value="">---------</option>';
+                        data.forEach(raca => {
+                            const option = document.createElement('option');
+                            option.value = raca.id;
+                            option.textContent = raca.nome;
+                            racaSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar raças:', error);
+                        racaSelect.innerHTML = '<option value="">Erro ao carregar</option>';
+                    });
+            } else {
+                racaSelect.innerHTML = '<option value="">Selecione um tipo de animal primeiro</option>';
+            }
+        });
+    </script>
+{% endblock %}

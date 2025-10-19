@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Tipos de Animais{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Tipos de Animais</h1>
+        <a href="{% url 'tipoanimal_create' %}" class="btn btn-primary">Adicionar Novo Tipo</a>
+    </div>
+    <hr>
+
+    <ul class="list-group">
+    {% for tipo in object_list %}
+        <li class="list-group-item">
+            <i class="{{ tipo.icone }} me-3"></i> 
+            {{ tipo.nome }}
+        </li>
+    {% empty %}
+        <li class="list-group-item">Nenhum tipo de animal cadastrado.</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

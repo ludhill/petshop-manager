@@ -1,0 +1,15 @@
+# Arquivos de ambiente virtual
+venv/
+
+# Arquivos de cache do Python
+__pycache__/
+*.pyc
+
+# Arquivo de segredos (NUNCA ENVIE ISSO!)
+.env
+
+# Banco de dados local (boa prática, mesmo não usando mais)
+db.sqlite3
+
+# Pasta de uploads de mídia
+media/ 

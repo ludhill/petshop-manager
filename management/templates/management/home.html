@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Página Inicial - Petshop Manager{% endblock %}
+
+{% block content %}
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Bem-vindo ao Petshop Manager!</h1>
+            <p class="col-md-8 fs-4">Use a barra de navegação acima para gerenciar os dados do sistema.</p>
+        </div>
+    </div>
+
+    <h2>Animais Cadastrados</h2>
+    <hr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nome do Animal</th>
+                <th scope="col">Sexo</th> <th scope="col">Raça</th>
+                <th scope="col">Proprietário</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for animal in animais %}
+                <tr>
+                    <td>{{ animal.nome }}</td>
+                    <td>
+                        <i class="{{ animal.get_sexo_icone }} me-2"></i>
+                        {{ animal.get_sexo_display }}
+                    </td>
+                    <td>{{ animal.raca.nome }} ({{ animal.tipo_animal.nome }})</td>
+                    <td>{{ animal.proprietario.username }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center">Nenhum animal cadastrado ainda.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %} 
